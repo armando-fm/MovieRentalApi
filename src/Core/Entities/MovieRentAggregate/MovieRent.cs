@@ -1,9 +1,10 @@
 ﻿using Core.Entities.MovieAggregate;
 using SharedKernel;
+using SharedKernel.Interfaces;
 
 namespace Core.Entities;
 
-public class MovieRent: BaseEntity
+public class MovieRent: BaseEntity, IAggregateRoot
 {
   public DateTimeOffset RentDate { get; set; }
   public DateTimeOffset ReturnDate { get; set; }

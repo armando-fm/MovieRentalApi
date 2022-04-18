@@ -26,7 +26,7 @@ public class List : EndpointBaseAsync.WithoutRequest.WithActionResult<CustomerLi
   {
     var response = new CustomerListResponse();
 
-    response.CustomerDTOs = (await _repository.ListAsync(cancellationToken))
+    response.Customers = (await _repository.ListAsync(cancellationToken))
       .Select(customer => new CustomerDTO(customer.Id, customer.Name, customer.Cpf, customer.BirthDate))
       .ToList();
 
