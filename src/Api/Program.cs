@@ -42,8 +42,8 @@ public class Program
       var password = builder.Configuration["DB_PASSWORD"] ?? "p@55w0rd";
       var db = builder.Configuration["DB_NAME"] ?? "movie_rent_db";
 
-      connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};";
-    }
+      connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};SSL Mode=None";
+    }mysql://b6d492b85711a8:73d3d4b0@us-cdbr-east-05.cleardb.net/heroku_f822c228da0d188?reconnect=true
 
     builder.Services.AddDbContext(connectionString);
     builder.Services
