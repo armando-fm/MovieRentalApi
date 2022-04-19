@@ -20,13 +20,30 @@ public class Program
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
+    string connectionString;
 
-    var host = builder.Configuration["DB_HOST"] ?? "localhost";
-    var port = builder.Configuration["DB_PORT"] ?? "3306";
-    var password = builder.Configuration["DB_PASSWORD"] ?? "p@55w0rd";
-    var db = builder.Configuration["DB_NAME"] ?? "movie_rent_db";
+    if (builder.Environment.EnvironmentName == "Production") {
+      
+      var connUrl = Environment.GetEnvironmentVariable("CLEARDB_DATABASE_URL");
 
-    string connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};";
+      connUrl = connUrl.Replace("mysql://", string.Empty);
+      var userPassSide = connUrl.Split("@")[0];
+      var hostSide = connUrl.Split("@")[1];
+
+      var connUser = userPassSide.Split(":")[0];
+      var connPass = userPassSide.Split(":")[1];
+      var connHost = hostSide.Split("/")[0];
+      var connDb = hostSide.Split("/")[1].Split("?")[0];
+      
+      connectionString = $"server={connHost};Uid={connUser};Pwd={connPass};Database={connDb}";
+    } else {
+      var host = builder.Configuration["DB_HOST"] ?? "localhost";
+      var port = builder.Configuration["DB_PORT"] ?? "3306";
+      var password = builder.Configuration["DB_PASSWORD"] ?? "p@55w0rd";
+      var db = builder.Configuration["DB_NAME"] ?? "movie_rent_db";
+
+      connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};";
+    }
 
     builder.Services.AddDbContext(connectionString);
     builder.Services
