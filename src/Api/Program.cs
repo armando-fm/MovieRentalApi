@@ -35,15 +35,15 @@ public class Program
       var connHost = hostSide.Split("/")[0];
       var connDb = hostSide.Split("/")[1].Split("?")[0];
       
-      connectionString = $"server={connHost};Uid={connUser};Pwd={connPass};Database={connDb}";
+      connectionString = $"server={connHost};Uid={connUser};Pwd={connPass};Database={connDb};SSL Mode=None";
     } else {
       var host = builder.Configuration["DB_HOST"] ?? "localhost";
       var port = builder.Configuration["DB_PORT"] ?? "3306";
       var password = builder.Configuration["DB_PASSWORD"] ?? "p@55w0rd";
       var db = builder.Configuration["DB_NAME"] ?? "movie_rent_db";
 
-      connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};SSL Mode=None";
-    }mysql://b6d492b85711a8:73d3d4b0@us-cdbr-east-05.cleardb.net/heroku_f822c228da0d188?reconnect=true
+      connectionString = $"server={host};userid=root;pwd={password};port={port};database={db};";
+    }
 
     builder.Services.AddDbContext(connectionString);
     builder.Services
