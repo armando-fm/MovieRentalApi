@@ -7,6 +7,6 @@ namespace Api.MovieRentEndpoints
 {
     public class MovieRentListResponse
     {
-        public List<MovieRentDTO> MovieRents { get; set;} = new List<MovieRentDTO>();
+        public List<MovieRentDTO> Data { get; set;} = new List<MovieRentDTO>();
     }
 }

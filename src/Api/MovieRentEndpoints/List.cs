@@ -29,7 +29,7 @@ namespace Api.MovieRentEndpoints
             var response = new MovieRentListResponse();
             var spec = new MovieRentWithCustomerAndWithMovieSpec();
             
-            response.MovieRents = (
+            response.Data = (
                 await _repository
                 .ListAsync(spec, cancellationToken))
                 .Select(movieRent =>

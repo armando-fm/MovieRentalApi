@@ -2,5 +2,5 @@
 
 public class CustomerListResponse
 {
-  public List<CustomerDTO> Customers { get; set; } = new List<CustomerDTO>();
+  public List<CustomerDTO> Data { get; set; } = new List<CustomerDTO>();
 }

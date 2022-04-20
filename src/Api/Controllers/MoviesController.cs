@@ -1,5 +1,6 @@
 ﻿using Api.ApiModels;
 using Core.Entities.MovieAggregate;
+using Core.Entities.MovieAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using SharedKernel.Interfaces;
@@ -24,7 +25,25 @@ public class MoviesController : BaseApiController
       .Select(movie => new MovieDTO(movie.Id, movie.Title , movie.IndicativeClassification))
       .ToList();
 
-    return Ok(moviesDTOs);
+    var response = new {
+      data = moviesDTOs
+    };
+
+    return Ok(response);
+  }
+
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> Delete(int id)
+  {
+    var movieToDelete = await _repository.GetByIdAsync(id);
+
+    if (movieToDelete == null) {
+      return NotFound();
+    }
+
+    await _repository.DeleteAsync(movieToDelete);
+
+    return NoContent();
   }
 
   [HttpPost("import")]
@@ -47,23 +66,23 @@ public class MoviesController : BaseApiController
       {
         if (!string.IsNullOrEmpty(lines[i])) {
           var movieDetails = lines[i].Split(';');
-          Console.WriteLine(movieDetails[0]);
+          var spec = new CountMoviesByTitleSpec(movieDetails[1]);
           // verify if movie does not yet exist in database
-          if (await _repository.GetByIdAsync(int.Parse(movieDetails[0])) == null) {
+          if (await _repository.CountAsync(spec) == 0) {
             try {
               // import movie
               var movie = new Movie(movieDetails[1], int.Parse(movieDetails[2]), movieDetails[3] != "0");
               await _repository.AddAsync(movie);
 
-              imported.Add($"movie: {movieDetails[1]}, has been imported");
+              imported.Add($"filme: {movieDetails[1]}, foi importado");
 
             } catch (Exception ex) {
-              var message =  $"could not import movie {movieDetails[1]} due to error: {ex.Message}";
+              var message =  $"filme: {movieDetails[1]} não foi importado devido a um erro: {ex.Message}";
               notImported.Add(message);
               _logger.LogError(ex, message);
             }
           } else {
-            notImported.Add($" could not import movie {movieDetails[1]} because it is already in the database");
+            notImported.Add($"filme: {movieDetails[1]}, não foi importado porque já existe no banco de dados");
           }
         }        
       }

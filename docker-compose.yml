@@ -11,12 +11,14 @@ services:
     ports:
       - "5200:80"
     restart: always
+    networks:
+      - common_network
     environment:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_PASSWORD=p@55w0rd
       - DB_NAME=movie_rent_db
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Docker
   db:
     image: mysql:8.0.28
     restart: always
@@ -35,5 +37,7 @@ services:
     environment:
       - PMA_ARBITRARY=1
 
+networks:
+  common_network:
 volumes:
   datafiles:
