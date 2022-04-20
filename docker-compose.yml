@@ -29,11 +29,15 @@ services:
       - "3306:3306"
     volumes:
       - datafiles:/var/lib/mysql
+    networks:
+      - common_network
   phpmyadmin:
     image: phpmyadmin
     restart: always
     ports:
       - "8080:80"
+    networks:
+      - common_network
     environment:
       - PMA_ARBITRARY=1
 
